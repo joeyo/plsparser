@@ -49,6 +49,7 @@ def playlist(pls_fp):
 
     Exceptions:
     NotAPLSFileError if the file isn't recognized as a pls file.
+    CorruptPLSFileError if the file contains invalid data / wrong formatting.
 
     Example usage:
     with open("list.pls") as f:
