@@ -27,9 +27,11 @@ import configparser
 
 _SECTION_PLAYLIST = "playlist"
 
+
 class NotAPLSFileError(Exception):
     """Raised when the file isn't recognized as a pls file."""
     pass
+
 
 class CorruptPLSFileError(Exception):
     """Raised when the file contains invalid data or the formatting is wrong"""

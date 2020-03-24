@@ -27,6 +27,7 @@ import StringIO
 
 import plsparser
 
+
 class ValidPLSFileTest(unittest.TestCase):
     """Test valid pls file content."""
 
@@ -44,7 +45,6 @@ class ValidPLSFileTest(unittest.TestCase):
 
         self.assertEquals([expected], actual)
 
-
     def testMultipleEntries(self):
         """Test with multiple entries in the pls file."""
         tmpl = "File%d=File %d\nTitle%d=Title %d\nLength%d=%d\n"
@@ -53,11 +53,13 @@ class ValidPLSFileTest(unittest.TestCase):
                                      "NumberOfEntries=3\n" +
                                      data +
                                      "Version=2")
-        expected = [("File %d" % i, "Title %d" % i, "%d" % i) for i in range(1, 4)]
+        expected = [("File %d" % i, "Title %d" % i, "%d" % i)
+                    for i in range(1, 4)]
 
         actual = [entry for entry in plsparser.playlist(pls_file)]
 
         self.assertEquals(expected, actual)
+
 
 class NonValidPLSFileTest(unittest.TestCase):
     """Test non valid pls file."""
@@ -109,6 +111,7 @@ class NonValidPLSFileTest(unittest.TestCase):
 
         plist = plsparser.playlist(pls_file)
         self.assertRaises(plsparser.CorruptPLSFileError, plist.next)
+
 
 if __name__ == "__main__":
     unittest.main()
