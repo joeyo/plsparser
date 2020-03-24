@@ -22,8 +22,8 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
+import io
 import unittest
-import StringIO
 
 import plsparser
 
@@ -33,12 +33,12 @@ class ValidPLSFileTest(unittest.TestCase):
 
     def testSingleEntry(self):
         """Test with single entry in the pls file."""
-        pls_file = StringIO.StringIO("[playlist]\n"
-                                     "NumberOfEntries=1\n"
-                                     "File1=http://ip:port\n"
-                                     "Title1=A Title\n"
-                                     "Length1=-1\n"
-                                     "Version=2")
+        pls_file = io.StringIO("[playlist]\n"
+                               "NumberOfEntries=1\n"
+                               "File1=http://ip:port\n"
+                               "Title1=A Title\n"
+                               "Length1=-1\n"
+                               "Version=2")
         expected = ("http://ip:port", "A Title", "-1")
 
         actual = [entry for entry in plsparser.playlist(pls_file)]
@@ -49,10 +49,10 @@ class ValidPLSFileTest(unittest.TestCase):
         """Test with multiple entries in the pls file."""
         tmpl = "File%d=File %d\nTitle%d=Title %d\nLength%d=%d\n"
         data = "".join([tmpl % (i, i, i, i, i, i) for i in range(1, 4)])
-        pls_file = StringIO.StringIO("[playlist]\n"
-                                     "NumberOfEntries=3\n" +
-                                     data +
-                                     "Version=2")
+        pls_file = io.StringIO("[playlist]\n"
+                               "NumberOfEntries=3\n" +
+                               data +
+                               "Version=2")
         expected = [("File %d" % i, "Title %d" % i, "%d" % i)
                     for i in range(1, 4)]
 
@@ -66,48 +66,48 @@ class NonValidPLSFileTest(unittest.TestCase):
 
     def testFileWithoutPLSMarker(self):
         """Should raise a NotAPLSFileError."""
-        pls_file = StringIO.StringIO("\n"
-                                     "NumberOfEntries=1\n"
-                                     "File1=http://ip:port\n"
-                                     "Title1=A Title\n"
-                                     "Length1=-1\n"
-                                     "Version=2")
+        pls_file = io.StringIO("\n"
+                               "NumberOfEntries=1\n"
+                               "File1=http://ip:port\n"
+                               "Title1=A Title\n"
+                               "Length1=-1\n"
+                               "Version=2")
 
         plist = plsparser.playlist(pls_file)
         self.assertRaises(plsparser.NotAPLSFileError, plist.next)
 
     def testFileWithWrongPLSMarker(self):
         """Should raise a NotAPLSFileError."""
-        pls_file = StringIO.StringIO("[my_playlist]\n"
-                                     "NumberOfEntries=1\n"
-                                     "File1=http://ip:port\n"
-                                     "Title1=A Title\n"
-                                     "Length1=-1\n"
-                                     "Version=2")
+        pls_file = io.StringIO("[my_playlist]\n"
+                               "NumberOfEntries=1\n"
+                               "File1=http://ip:port\n"
+                               "Title1=A Title\n"
+                               "Length1=-1\n"
+                               "Version=2")
 
         plist = plsparser.playlist(pls_file)
         self.assertRaises(plsparser.NotAPLSFileError, plist.next)
 
     def testMissingNumberOfEntries(self):
         """Should raise a CorruptPLSFileError."""
-        pls_file = StringIO.StringIO("[playlist]\n"
-                                     "\n"
-                                     "File1=http://ip:port\n"
-                                     "Title1=A Title\n"
-                                     "Length1=-1\n"
-                                     "Version=2")
+        pls_file = io.StringIO("[playlist]\n"
+                               "\n"
+                               "File1=http://ip:port\n"
+                               "Title1=A Title\n"
+                               "Length1=-1\n"
+                               "Version=2")
 
         plist = plsparser.playlist(pls_file)
         self.assertRaises(plsparser.CorruptPLSFileError, plist.next)
 
     def testInvalidNumberOfEntries(self):
         """Should raise a CorruptPLSFileError."""
-        pls_file = StringIO.StringIO("[playlist]\n"
-                                     "NumberOfEntries=ABC\n"
-                                     "File1=http://ip:port\n"
-                                     "Title1=A Title\n"
-                                     "Length1=-1\n"
-                                     "Version=2")
+        pls_file = io.StringIO("[playlist]\n"
+                               "NumberOfEntries=ABC\n"
+                               "File1=http://ip:port\n"
+                               "Title1=A Title\n"
+                               "Length1=-1\n"
+                               "Version=2")
 
         plist = plsparser.playlist(pls_file)
         self.assertRaises(plsparser.CorruptPLSFileError, plist.next)
