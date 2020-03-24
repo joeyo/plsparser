@@ -53,7 +53,7 @@ def playlist(pls_fp):
 
     Example usage:
     with open("list.pls") as f:
-        for entry in playlist(f):
+        for entry in plsparser.playlist(f):
             player.add_url(entry[0])
 
     See 'http://en.wikipedia.org/wiki/PLS_(file_format)' for more
