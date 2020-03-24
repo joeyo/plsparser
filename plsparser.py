@@ -71,14 +71,11 @@ def playlist(pls_fp):
         raise NotAPLSFileError()
 
     try:
-        num_entries = parser.getint(_SECTION_PLAYLIST, "NumberOfEntries") + 1
+        num_entries = parser.getint(_SECTION_PLAYLIST, "NumberOfEntries")
     except (configparser.NoOptionError, ValueError):
         raise CorruptPLSFileError()
 
-    index = 1
-
-    while not index == num_entries:
+    for index in range(1, num_entries+1):
         yield (parser.get(_SECTION_PLAYLIST, "File%d" % index),
                parser.get(_SECTION_PLAYLIST, "Title%d" % index),
                parser.get(_SECTION_PLAYLIST, "Length%d" % index))
-        index = index + 1
