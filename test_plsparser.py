@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Copyright (c) 2009, Mario Boikov <mario@beblue.org>
 All rights reserved.
