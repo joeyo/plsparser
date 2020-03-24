@@ -77,7 +77,7 @@ def playlist(pls_fp):
     index = 1
 
     while not index == num_entries:
-        yield (parser.get(_SECTION_PLAYLIST, "Title%d" % index),
-               parser.get(_SECTION_PLAYLIST, "File%d" % index),
+        yield (parser.get(_SECTION_PLAYLIST, "File%d" % index),
+               parser.get(_SECTION_PLAYLIST, "Title%d" % index),
                parser.get(_SECTION_PLAYLIST, "Length%d" % index))
         index = index + 1
