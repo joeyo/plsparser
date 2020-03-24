@@ -43,7 +43,7 @@ class ValidPLSFileTest(unittest.TestCase):
 
         actual = [entry for entry in plsparser.playlist(pls_file)]
 
-        self.assertEquals([expected], actual)
+        self.assertEqual([expected], actual)
 
     def testMultipleEntries(self):
         """Test with multiple entries in the pls file."""
@@ -58,7 +58,7 @@ class ValidPLSFileTest(unittest.TestCase):
 
         actual = [entry for entry in plsparser.playlist(pls_file)]
 
-        self.assertEquals(expected, actual)
+        self.assertEqual(expected, actual)
 
 
 class NonValidPLSFileTest(unittest.TestCase):
@@ -74,7 +74,8 @@ class NonValidPLSFileTest(unittest.TestCase):
                                "Version=2")
 
         plist = plsparser.playlist(pls_file)
-        self.assertRaises(plsparser.NotAPLSFileError, plist.next)
+        with self.assertRaises(plsparser.NotAPLSFileError):
+            next(plist)
 
     def testFileWithWrongPLSMarker(self):
         """Should raise a NotAPLSFileError."""
@@ -86,7 +87,8 @@ class NonValidPLSFileTest(unittest.TestCase):
                                "Version=2")
 
         plist = plsparser.playlist(pls_file)
-        self.assertRaises(plsparser.NotAPLSFileError, plist.next)
+        with self.assertRaises(plsparser.NotAPLSFileError):
+            next(plist)
 
     def testMissingNumberOfEntries(self):
         """Should raise a CorruptPLSFileError."""
@@ -98,7 +100,8 @@ class NonValidPLSFileTest(unittest.TestCase):
                                "Version=2")
 
         plist = plsparser.playlist(pls_file)
-        self.assertRaises(plsparser.CorruptPLSFileError, plist.next)
+        with self.assertRaises(plsparser.CorruptPLSFileError):
+            next(plist)
 
     def testInvalidNumberOfEntries(self):
         """Should raise a CorruptPLSFileError."""
@@ -110,7 +113,8 @@ class NonValidPLSFileTest(unittest.TestCase):
                                "Version=2")
 
         plist = plsparser.playlist(pls_file)
-        self.assertRaises(plsparser.CorruptPLSFileError, plist.next)
+        with self.assertRaises(plsparser.CorruptPLSFileError):
+            next(plist)
 
 
 if __name__ == "__main__":
