@@ -23,7 +23,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import ConfigParser
+import configparser
 
 _SECTION_PLAYLIST = "playlist"
 
@@ -57,11 +57,11 @@ def playlist(pls_fp):
     information about the pls file format.
 
     """
-    parser = ConfigParser.RawConfigParser()
+    parser = configparser.ConfigParser()
 
     try:
-        parser.readfp(pls_fp)
-    except ConfigParser.MissingSectionHeaderError:
+        parser.read_file(pls_fp)
+    except configparser.MissingSectionHeaderError:
         raise NotAPLSFileError()
 
     if not parser.has_section(_SECTION_PLAYLIST):
@@ -69,13 +69,13 @@ def playlist(pls_fp):
 
     try:
         num_entries = parser.getint(_SECTION_PLAYLIST, "NumberOfEntries") + 1
-    except (ConfigParser.NoOptionError, ValueError):
+    except (configparser.NoOptionError, ValueError):
         raise CorruptPLSFileError()
 
     index = 1
 
     while not index == num_entries:
-        yield (parser.get(_SECTION_PLAYLIST, "File%d" % index),
-               parser.get(_SECTION_PLAYLIST, "Title%d" % index),
+        yield (parser.get(_SECTION_PLAYLIST, "Title%d" % index),
+               parser.get(_SECTION_PLAYLIST, "File%d" % index),
                parser.get(_SECTION_PLAYLIST, "Length%d" % index))
         index = index + 1
